@@ -97,7 +97,7 @@ use the jar file  target\fxLngthParser-0.0.1-SNAPSHOT.jar to your project.
   		this.date = date;
   	}
 
-  }
+    }
 
   # Implementation
 
@@ -156,4 +156,4 @@ use the jar file  target\fxLngthParser-0.0.1-SNAPSHOT.jar to your project.
 
 
       }
-  }
+      }
