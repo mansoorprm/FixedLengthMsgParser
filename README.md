@@ -101,48 +101,48 @@ use the jar file  target\fxLngthParser-0.0.1-SNAPSHOT.jar to your project.
 
   # Implementation
 
-  package com.virtusa.xlabs.fxLngthParser.test;
+      package com.virtusa.xlabs.fxLngthParser.test;
 
-  import java.io.IOException;
-  import java.lang.reflect.InvocationTargetException;
-  import java.util.List;
+      import java.io.IOException;
+      import java.lang.reflect.InvocationTargetException;
+      import java.util.List;
 
-  import com.virtusa.xlabs.fxLngthParser.StringReader;
-
-
-  /**
-   * @author Mansoor Parambath
-   * @XLABS - Virtusa Corporation
-   *
-   */
+      import com.virtusa.xlabs.fxLngthParser.StringReader;
 
 
-  public class App
-  {
-  	public static void main( String[] args )
+      /**
+       * @author Mansoor Parambath
+       * @XLABS - Virtusa Corporation
+       *
+       */
+
+
+      public class App
       {
-      	try {
-  			testReadAString();
-  		} catch (IllegalArgumentException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		} catch (IllegalAccessException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		} catch (InstantiationException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		} catch (NoSuchMethodException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		} catch (InvocationTargetException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		} catch (IOException e) {
-  			// TODO Auto-generated catch block
-  			e.printStackTrace();
-  		}
-      }
+      	public static void main( String[] args )
+          {
+          	try {
+      			testReadAString();
+      		} catch (IllegalArgumentException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		} catch (IllegalAccessException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		} catch (InstantiationException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		} catch (NoSuchMethodException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		} catch (InvocationTargetException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		} catch (IOException e) {
+      			// TODO Auto-generated catch block
+      			e.printStackTrace();
+      		}
+          }
 
       public static void testReadAString() throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, IOException {
 
