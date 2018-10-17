@@ -9,9 +9,9 @@ import com.virtusa.xlabs.fxLngthParser.Fixed;
 public class PersonFlat {
     @Fixed(pos = 1, length = 1)
     private byte id;
-    @Fixed(pos = 2, length = 5)
+    @Fixed(pos = 2, length = 7)
     private String name;
-    @Fixed(pos = 3, length = 10)
+    @Fixed(pos = 3, length = 9)
     private String surname;
     @Fixed(pos = 4, length = 1)
     private char gender;
@@ -82,7 +82,5 @@ public class PersonFlat {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-    
-    
     
 }

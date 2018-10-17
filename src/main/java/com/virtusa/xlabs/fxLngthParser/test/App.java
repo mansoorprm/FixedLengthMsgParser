@@ -19,7 +19,7 @@ public class App
 	public static void main( String[] args )
     {
     	try {
-			testReadAFile();
+			testReadAString();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,10 +41,11 @@ public class App
 		}
     }
     
-    public static void testReadAFile() throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, IOException {
-       // String text = "1mansoorparambathMabcdpgkhgfjfhjkjdhjkjfskfjhaskfjsakjfdshfkjsdkfjghjkdsfsfkjjsdfhasjfgdhfgsdhjfgsdhfgsdhjfgsdhfgsdhfgsdhfgsdhfgdshfgshd";
-        String text = "1abcde1234567890Mtrue20192018-10-18";
-//1abcde1234567890M123452019ABCDe
+    public static void testReadAString() throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, IOException {
+     
+    	//replace your text with your message 
+    	String text = "1MansoorParambathMtrue20192018-10-18";
+
     	StringReader<PersonFlat> instance = new StringReader(PersonFlat.class, text);
         List<PersonFlat> result = instance.readString();
         System.out.println(result);
