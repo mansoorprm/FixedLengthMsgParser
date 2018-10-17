@@ -16,7 +16,7 @@ public class PersonFlat {
     @Fixed(pos = 4, length = 1)
     private char gender;
     @Fixed(pos = 5, length = 4)
-    private boolean positiveBalance;
+    private boolean positive;
     @Fixed(pos = 6, length = 4)
     private BigDecimal year;
     @Fixed(pos = 7, length = 10)
@@ -24,7 +24,7 @@ public class PersonFlat {
  
     @Override
     public String toString() {
-        return "PersonFlat{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", gender=" + gender + ", positiveBalance=" + positiveBalance + ", year=" + year + ", date=" + date + '}';
+        return "PersonFlat{" + "id=" + id + ", name=" + name + ", surname=" + surname + ", gender=" + gender + ", positive=" + positive + ", year=" + year + ", date=" + date + '}';
     }
 
 	public byte getId() {
@@ -59,13 +59,7 @@ public class PersonFlat {
 		this.gender = gender;
 	}
 
-	public boolean isPositiveBalance() {
-		return positiveBalance;
-	}
-
-	public void setPositiveBalance(boolean positiveBalance) {
-		this.positiveBalance = positiveBalance;
-	}
+	
 
 	public BigDecimal getYear() {
 		return year;
