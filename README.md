@@ -12,29 +12,29 @@ use the jar file  target\fxLngthParser-0.0.1-SNAPSHOT.jar to your project.
 
 # POJO
 
-  package com.virtusa.xlabs.fxLngthParser.test;
+      package com.virtusa.xlabs.fxLngthParser.test;
 
 
-  import java.math.BigDecimal;
-  import java.util.Date;
+      import java.math.BigDecimal;
+      import java.util.Date;
 
-  import com.virtusa.xlabs.fxLngthParser.Fixed;
+      import com.virtusa.xlabs.fxLngthParser.Fixed;
 
-  public class PersonFlat {
-      @Fixed(pos = 1, length = 1)
-      private byte id;
-      @Fixed(pos = 2, length = 5)
-      private String name;
-      @Fixed(pos = 3, length = 10)
-      private String surname;
-      @Fixed(pos = 4, length = 1)
-      private char gender;
-      @Fixed(pos = 5, length = 4)
-      private boolean positiveBalance;
-      @Fixed(pos = 6, length = 4)
-      private BigDecimal year;
-      @Fixed(pos = 7, length = 10)
-      private Date date;
+      public class PersonFlat {
+          @Fixed(pos = 1, length = 1)
+          private byte id;
+          @Fixed(pos = 2, length = 5)
+          private String name;
+          @Fixed(pos = 3, length = 10)
+          private String surname;
+          @Fixed(pos = 4, length = 1)
+          private char gender;
+          @Fixed(pos = 5, length = 4)
+          private boolean positiveBalance;
+          @Fixed(pos = 6, length = 4)
+          private BigDecimal year;
+          @Fixed(pos = 7, length = 10)
+          private Date date;
 
       @Override
       public String toString() {
