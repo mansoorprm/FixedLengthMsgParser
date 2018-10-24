@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class StringReader<T> {
 	
-	
+	Logger logger = Logger.getLogger(StringReader.class.getName());
 	
 	HashMap<Integer,Integer> offsetMap = new HashMap<Integer,Integer>();
  
@@ -49,13 +49,9 @@ public class StringReader<T> {
      * 
      * @param lines list of lines from the String
      * @return list of lines in a form of type T
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException 
+     * @throws Exception 
      */
-    private List<T> readString(String line) throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private List<T> readString(String line) throws Exception {
         if (line == null || line.isEmpty()) {
             throw new IllegalArgumentException("No value to be read");
         }
@@ -106,12 +102,11 @@ public class StringReader<T> {
      * @param field field to be modified so that it has correct data
      * @param line text line read from the file
      * @param newInstance type to cast/convert results to
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws SecurityException 
+     * @throws Exception 
      */
-    private void processFixedString(Field field, String line, T newInstance) throws IllegalArgumentException, IllegalAccessException, SecurityException {
-        field.setAccessible(true);
+    private void processFixedString(Field field, String line, T newInstance) throws Exception {
+        try {
+    	field.setAccessible(true);
         Fixed fixed = field.getAnnotation(Fixed.class);
         int pos = fixed.pos();
         int length = fixed.length();
@@ -121,6 +116,13 @@ public class StringReader<T> {
         Class<?> type = field.getType();
         String value = line.substring(offsetFrom, offsetTo).trim();
         setData(type, value, field, newInstance);
+        }catch(Exception e) {
+        	String exp = "Exception: " + e + " at the field @" + field.getName() + " position @" + field.getAnnotation(Fixed.class).pos();
+        	
+        	logger.log(Level.SEVERE, null, exp);
+        	
+        	throw new Exception(exp);
+        }
     }
  
     /**
@@ -128,14 +130,9 @@ public class StringReader<T> {
      * Converts each line to a List<T> where <T> can be any type passed to constructor
      * 
      * @return List<T> from file.
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IOException 
+     * @throws Exception 
      */
-    public List<T> readString() throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, IOException {
+    public List<T> readString() throws Exception {
         return readString(text);
     }
  
@@ -145,40 +142,47 @@ public class StringReader<T> {
      * @param value value to pass to the field
      * @param field to set the value for
      * @param newInstance instance has the annotation to understand the file.
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException 
+     * @throws Exception 
      */
-    private void setData(Class<?> type, String value, Field field, T newInstance) throws IllegalAccessException, IllegalArgumentException {
-        if (Number.class.isAssignableFrom(type)) {
-            setNumericValue(value, type, field, newInstance);
-        } else if (type.isPrimitive() && !type.isAssignableFrom(Character.TYPE) && !type.isAssignableFrom(Boolean.TYPE)) {
-            setNumericValue(value, type, field, newInstance);
-        } else if (type.isAssignableFrom(Character.class) || type.isAssignableFrom(Character.TYPE)) {
-            field.set(newInstance, value.charAt(0));
-        } else if (type.isAssignableFrom(Boolean.class) || type.equals(Boolean.TYPE)) {
-            field.set(newInstance, Boolean.parseBoolean(value.trim()));
-        } else if (type.isAssignableFrom(BigDecimal.class) || type.isInstance(BigDecimal.class)) {
-            BigDecimal num = new BigDecimal(value);
-            field.set(newInstance, num);
-        } else if (type.isAssignableFrom(Date.class)) {
-            if(value.length() < 10) {
-                return;
-            }
-            try {
-                String dateSeparater = value.contains("-") ? "-" : "/";
-                String year = value.substring(0, 4);
-                String month = value.substring(5, 7);
-                String day = value.substring(8, 10);
-                value = year + dateSeparater + month + dateSeparater + day;
-                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
-                field.set(newInstance, date);
-            } catch (ParseException ex) {
-                Logger.getLogger(StringReader.class.getName()).log(Level.SEVERE, null, ex);
-            }
-             
-        } else if (type.isAssignableFrom(String.class)) {
-            field.set(newInstance, value);
-        }
+    private void setData(Class<?> type, String value, Field field, T newInstance) throws Exception {
+       try {
+	    	if (Number.class.isAssignableFrom(type)) {
+	            setNumericValue(value, type, field, newInstance);
+	        } else if (type.isPrimitive() && !type.isAssignableFrom(Character.TYPE) && !type.isAssignableFrom(Boolean.TYPE)) {
+	            setNumericValue(value, type, field, newInstance);
+	        } else if (type.isAssignableFrom(Character.class) || type.isAssignableFrom(Character.TYPE)) {
+	            field.set(newInstance, value.charAt(0));
+	        } else if (type.isAssignableFrom(Boolean.class) || type.equals(Boolean.TYPE)) {
+	            field.set(newInstance, Boolean.parseBoolean(value.trim()));
+	        } else if (type.isAssignableFrom(BigDecimal.class) || type.isInstance(BigDecimal.class)) {
+	            BigDecimal num = new BigDecimal(value);
+	            field.set(newInstance, num);
+	        } else if (type.isAssignableFrom(Date.class)) {
+	            if(value.length() < 10) {
+	                return;
+	            }
+	            try {
+	                String dateSeparater = value.contains("-") ? "-" : "/";
+	                String year = value.substring(0, 4);
+	                String month = value.substring(5, 7);
+	                String day = value.substring(8, 10);
+	                value = year + dateSeparater + month + dateSeparater + day;
+	                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+	                field.set(newInstance, date);
+	            } catch (ParseException ex) {
+	                logger.log(Level.SEVERE, null, ex);
+	            }
+	             
+	        } else if (type.isAssignableFrom(String.class)) {
+	            field.set(newInstance, value);
+	        }
+       }catch(Exception e) {
+    	   String exp = "Exception: " + e + " at the field @" + field.getName() + " position @" + field.getAnnotation(Fixed.class).pos();
+       	
+       		logger.log(Level.SEVERE, null, exp);
+       	
+       		throw new Exception(exp);
+       }
     }
  
     /**
@@ -187,34 +191,41 @@ public class StringReader<T> {
      * @param type return type of a field
      * @param value value to pass to the field
      * @param field to set the value for
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException 
+     * @throws Exception 
      */
-    private void setNumericValue(String value, Class<?> type, Field field, T newInstance) throws IllegalAccessException, IllegalArgumentException {
-        if (value == null) {
-            value = "0";
-        } else if (value.startsWith("0")) {
-            value = value.substring(value.indexOf("0"));
-        }
-        if (!Character.isDigit(value.charAt(0))) {
-            return;
-        }
-        BigDecimal num = new BigDecimal(value);
-         
-        if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(Byte.TYPE)) {
-            field.set(newInstance, num.byteValue());
-        } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(Short.TYPE)) {
-            field.set(newInstance, num.shortValue());
-        } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(Integer.TYPE)) {
-            field.set(newInstance, num.intValue());
-        } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(Long.TYPE)) {
-            field.set(newInstance, num.longValue());
-        } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(Float.TYPE)) {
-            field.set(newInstance, num.floatValue());
-        } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(Double.TYPE)) {
-            field.set(newInstance, num.longValue());
-        } else {
-            field.set(newInstance, num);
+    private void setNumericValue(String value, Class<?> type, Field field, T newInstance) throws Exception {
+        try {
+	    	if (value == null) {
+	            value = "0";
+	        } else if (value.startsWith("0")) {
+	            value = value.substring(value.indexOf("0"));
+	        }
+	        //if (!Character.isDigit(value.charAt(0))) {
+	          //  return;
+	        //}
+	        BigDecimal num = new BigDecimal(value);
+	         
+	        if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(Byte.TYPE)) {
+	            field.set(newInstance, num.byteValue());
+	        } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(Short.TYPE)) {
+	            field.set(newInstance, num.shortValue());
+	        } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(Integer.TYPE)) {
+	            field.set(newInstance, num.intValue());
+	        } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(Long.TYPE)) {
+	            field.set(newInstance, num.longValue());
+	        } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(Float.TYPE)) {
+	            field.set(newInstance, num.floatValue());
+	        } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(Double.TYPE)) {
+	            field.set(newInstance, num.longValue());
+	        } else {
+	            field.set(newInstance, num);
+	        }
+        }catch(Exception e) {
+        	String exp = "Exception: " + e + " at the field @" + field.getName() + " position @" + field.getAnnotation(Fixed.class).pos();
+        	
+        	logger.log(Level.SEVERE, null, exp);
+        	
+        	throw new Exception(exp);
         }
     }
 }

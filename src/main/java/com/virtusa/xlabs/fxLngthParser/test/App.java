@@ -47,7 +47,13 @@ public class App
     	String text = "1MansoorParambathMtrue20192018-10-18";
 
     	StringReader<PersonFlat> instance = new StringReader(PersonFlat.class, text);
-        List<PersonFlat> result = instance.readString();
+        List<PersonFlat> result = null;
+		try {
+			result = instance.readString();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         System.out.println(result);
         System.out.println(result.get(0).getName());
 
