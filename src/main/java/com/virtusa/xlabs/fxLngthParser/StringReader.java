@@ -1,8 +1,6 @@
 package com.virtusa.xlabs.fxLngthParser;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,9 +65,11 @@ public class StringReader<T> {
             
             for (Field field : fields) {
             	field.setAccessible(true);
-            	offsetpos = field.getAnnotation(Fixed.class).pos();
-            	length = field.getAnnotation(Fixed.class).length();
-            	fieldMap.put(offsetpos, length);
+            	if (field.getAnnotation(Fixed.class) != null  ) {
+	            	offsetpos = field.getAnnotation(Fixed.class).pos();
+	            	length = field.getAnnotation(Fixed.class).length();
+	            	fieldMap.put(offsetpos, length);
+            	}
             }
             
             
@@ -84,7 +84,9 @@ public class StringReader<T> {
             
             
             for (Field field : fields) {
+            	if (field.getAnnotation(Fixed.class) != null  ) {
             	  processFixedString(field, line, newInstance);
+            	}
              }
             list.add(newInstance);
         
